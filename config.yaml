@@ -1,3 +1,11 @@
 app:
   name: BixParkSampleServer
   description: Service application for bixpark
+
+#  jdbc:postgresql://localhost:5432/bixpark_service_app_db?sslmode=disable?
+db:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: dewmal91
+  db: bixpark_service_app_db

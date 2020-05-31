@@ -2,7 +2,9 @@ package main
 
 import (
 	"bixpark_server/config"
+	"bixpark_server/internal/data"
 	"flag"
+	"log"
 	"os"
 )
 
@@ -15,5 +17,15 @@ func main() {
 	if err != nil {
 		println("Error on reading config")
 	}
-	println(config.App.Name)
+	// Load App configs
+	log.Println("Load config success ", config.App.Name)
+
+	//dB
+	db, err := DBConnect(config)
+	if err != nil {
+		log.Println("Error in DB Connect")
+	}
+	defer db.Close()
+	data.SetupDB(db)
+
 }
