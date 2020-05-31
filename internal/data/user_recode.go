@@ -7,7 +7,7 @@ type User struct {
 	FirstName  string     `json:"firstName"`
 	LastName   string     `json:"lastName"`
 	Email      string     `json:"email"`
-	ProfilePic FileRecode `gorm:"foreignkey:ID;association_autoupdate:false",json:"profilePic,bixpark:fileUpload"`
+	ProfilePic FileRecode `gorm:"foreignkey:ID;",json:"ProfilePic"`
 }
 type UserLogin struct {
 	gorm.Model

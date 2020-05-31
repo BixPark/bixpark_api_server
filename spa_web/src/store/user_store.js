@@ -7,7 +7,7 @@ class UserModal {
     firstName = "";
     lastName = "";
     email = "";
-    profilePic = {
+    ProfilePic = {
         path: ""
     };
 }
@@ -18,7 +18,7 @@ const InitialData = () => {
         firstName: initialData.firstName,
         lastName: initialData.lastName,
         email: initialData.email,
-        profilePic: initialData.profilePic,
+        ProfilePic: initialData.ProfilePic,
     }
 };
 

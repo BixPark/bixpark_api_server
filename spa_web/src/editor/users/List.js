@@ -36,8 +36,8 @@ export function List() {
                                     {val.ID}
                                 </td>
                                 <td className="border px-4 py-2">
-                                    {val.profilePic && <img
-                                        href={process.env.REACT_APP_BIXPARK_CONTENT_APP_BASE_URL + "/media/" + val.profilePic.path}/>}
+                                    {val.ProfilePic && <img
+                                        src={process.env.REACT_APP_BIXPARK_CONTENT_APP_BASE_URL + "media/" + val.ProfilePic.path}/>}
                                 </td>
                                 <td className="border px-4 py-2">
                                     <strong>{val.firstName}</strong>
