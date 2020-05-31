@@ -1,3 +1,5 @@
 .idea/
 _build/
 .exe
+node_modules/
+build/

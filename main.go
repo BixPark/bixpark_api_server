@@ -52,6 +52,7 @@ func main() {
 		fmt.Fprintf(w, "Category: %v\n", vars["category"])
 	})
 
+	app.Init()
 	api.SetupRoutes(&app)
 	data.SetupDB(&app)
 

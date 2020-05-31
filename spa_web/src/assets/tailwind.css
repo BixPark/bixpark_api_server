@@ -1,0 +1,10 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+
+#root{
+    @apply flex h-full bg-gray-100 font-sans
+}
