@@ -1,5 +1,5 @@
 import React from "react";
-import AddTag from "./Add";
+import Add from "./Add";
 import {List} from "./List";
 
 export function UserComponent() {
@@ -11,7 +11,7 @@ export function UserComponent() {
 
         <div className="flex flex-wrap">
             <div className="w-full lg:w-1/2 my-6 pr-0 lg:pr-2">
-                <AddTag/>
+                <Add/>
             </div>
             <div className="w-full lg:w-1/2 mt-6 pl-0 lg:pl-2">
                 <List/>

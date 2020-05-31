@@ -7,7 +7,6 @@ import (
 	"bixpark_server/internal/data"
 	"context"
 	"flag"
-	"fmt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -46,15 +45,12 @@ func main() {
 		Config: config,
 	}
 
-	app.Router.HandleFunc("/api/v1", func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "Category: %v\n", vars["category"])
-	})
-
 	app.Init()
+
 	api.SetupRoutes(&app)
 	data.SetupDB(&app)
+
+	app.Finalize()
 
 	srv := &http.Server{
 		Addr: "0.0.0.0:8080",
@@ -63,6 +59,7 @@ func main() {
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
 		Handler:      app.Router, // Pass our instance of gorilla/mux in.
+
 	}
 
 	// Run our server in a goroutine so that it doesn't block.

@@ -1,12 +1,12 @@
 import React, {useLayoutEffect, useState} from "react";
-import tagStore from '../../store/user_store'
+import userStore from '../../store/user_store'
 
 export function List() {
-    const [tagSate, setTagState] = useState(tagStore.initialState);
+    const [userState, setUserState] = useState(userStore.initialState);
 
     useLayoutEffect(() => {
-        const subs = tagStore.subscribe(setTagState);
-        tagStore.init().then(console.log);
+        const subs = userStore.subscribe(setUserState);
+        userStore.init().then(console.log);
         return () => subs.unsubscribe();
     }, []);
 
@@ -23,61 +23,41 @@ export function List() {
                     <tr>
                         <th className="px-4 py-2">ID</th>
                         <th className="px-4 py-2">Name</th>
-                        <th className="px-4 py-2">Color</th>
+                        <th className="px-4 py-2">Email</th>
                         <th className="px-4 py-2">Action</th>
                     </tr>
                     </thead>
                     <tbody>
 
-                    {tagSate.collection.map((val, i) => {
+                    {userState.collection.map((val, i) => {
                         return (
                             <tr className="bg-gray-100">
                                 <td className="border px-4 py-2">
                                     {val.ID}
                                 </td>
                                 <td className="border px-4 py-2">
-                                    <strong>{val.name}</strong>
+                                    <strong>{val.firstName}</strong>
                                 </td>
-                                <td className="border px-4 py-2" style={
-                                    {
-                                        position: "relative"
-                                    }
-                                }>
+                                <td className="border px-4 py-2">
+                                    <strong>{val.lastName}</strong>
+                                </td>
+                                <td className="border px-4 py-2">
+                                    <strong>{val.email}</strong>
+                                </td>
 
-                                    <div style={{
-                                        backgroundColor: val.primaryColor,
-                                        color: val.accentColor,
-                                        textAlign: "center",
-                                        fontWeight: 500,
-                                        width: 24,
-                                        height: 24
-                                    }}>
-                                        P
-                                    </div>
-                                    <div style={{
-                                        backgroundColor: val.accentColor,
-                                        color: val.primaryColor,
-                                        textAlign: "center",
-                                        fontWeight: 500,
-                                        width: 24,
-                                        height: 24
-                                    }}>
-                                        S
-                                    </div>
-                                </td>
                                 <td className="border px-4 py-2">
                                     <button
                                         onClick={() =>
-                                            tagStore.select(val)
+                                            userStore.select(val)
                                         }
                                         className="px-4  py-1 text-white  font-light tracking-wider bg-purple-500 rounded"
                                     >Edit
                                     </button>
                                     <button
                                         onClick={() =>
-                                            tagStore.delete(val.ID).then(
+                                            userStore.delete(val.ID).then(
                                                 () => {
-                                                    tagStore.changeCollection(tagSate.limit, tagSate.offset).then(console.log)
+                                                    userStore.changeCollection(userState.limit, userState.offset).then(console.log)
                                                 }
                                             )
 

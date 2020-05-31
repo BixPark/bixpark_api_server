@@ -28,8 +28,29 @@ func (app *BixParkApp) BuildPath(content string, pathParams ...string) string {
 
 func (app *BixParkApp) Init() {
 	app.Router.Use(cors)
+	app.Router.Use(func(handler http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			log.Println(app.Config.App.Name, "Route Log :: ", r.URL.String(), " ", r.Method)
+			handler.ServeHTTP(w, r)
+			return
+		})
+	})
+}
+func (app *BixParkApp) Finalize() {
 	spa := spaHandler{staticPath: "./spa_web/build", indexPath: "index.html"}
 	app.Router.PathPrefix("/").Handler(spa)
+}
+
+func openLogFile(logfile string) {
+	if logfile != "" {
+		lf, err := os.OpenFile(logfile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0640)
+
+		if err != nil {
+			log.Fatal("OpenLogfile: os.OpenFile:", err)
+		}
+
+		log.SetOutput(lf)
+	}
 }
 
 // CORS Middleware

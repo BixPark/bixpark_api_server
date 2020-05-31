@@ -6,18 +6,18 @@ function DashboardNav() {
     return (
         <>
             <Link to={"/"}>
-                <a
+                <div
                     className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                     <i className="fas fa-tachometer-alt mr-3"></i>
                     Dashboard
-                </a>
+                </div>
             </Link>
             <Link to={"/users"}>
-                <a
+                <div
                     className="flex items-center text-white py-4 pl-6 nav-item">
                     <i className="fas fa-list mr-3"></i>
                     Users
-                </a>
+                </div>
             </Link>
         </>
     );

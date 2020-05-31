@@ -4,9 +4,9 @@ import "github.com/jinzhu/gorm"
 
 type User struct {
 	gorm.Model
-	FirstName string
-	LastName  string
-	Email     string
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"email"`
 }
 type UserLogin struct {
 	Username  string

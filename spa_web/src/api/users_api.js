@@ -41,7 +41,7 @@ const UsersApi = {
             redirect: 'follow'
         })
             .then(res => res.json())
-            .then(res => res.message === "SUCCESS")
+            .then(res => res.message.message === "SUCCESS")
             .then(res => res.data).catch(err => console.log(err))
     },
 };

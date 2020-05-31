@@ -4,15 +4,17 @@ import UsersApi from '../api/users_api.js'
 const subject = new Subject();
 
 class UserModal {
-    first_name = "";
-    last_name = "";
+    firstName = "";
+    lastName = "";
+    email = "";
 }
 
 const InitialData = () => {
     const initialData = new UserModal();
     return {
-        first_name: initialData.first_name,
-        last_name: initialData.last_name,
+        firstName: initialData.firstName,
+        lastName: initialData.lastName,
+        email: initialData.email,
     }
 };
 
@@ -30,11 +32,11 @@ let state = initialState;
 
 const userStore = {
     init: async () => {
-        const tags = await UsersApi.getAll(state.limit, state.offset);
+        const users = await UsersApi.getAll(state.limit, state.offset);
         state = {
             ...state,
             selected: InitialData(),
-            collection: tags, newDataCount: tags.length
+            collection: users, newDataCount: users.length
         };
         subject.next(state);
     },

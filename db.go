@@ -20,6 +20,7 @@ func DBConnect(config *config.Config) (db *gorm.DB, err error) {
 	log.Println(dsn.String())
 
 	db, err = gorm.Open("postgres", dsn.String())
+	db.LogMode(true)
 
 	return
 }
