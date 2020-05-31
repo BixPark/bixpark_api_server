@@ -1,6 +1,7 @@
 app:
   name: BixParkSampleServer
   description: Service application for bixpark
+  mediaPath: H:\WorkingProjects\CeylonMobileApp\webapps\bixpark_server\_build\media
 route:
   prefix: api
   version: v1

@@ -18,10 +18,18 @@ function Add() {
         enableReinitialize: true,
         onSubmit: async (values, formikBag) => {
             formikBag.setSubmitting(true);
+
+            let data = new FormData();
+            data.append("firstName", values.firstName);
+            data.append("lastName", values.lastName);
+            data.append("email", values.email);
+            data.append("profilePic", values.profilePic);
+
+            console.log(data);
             if (userState.selected.ID != null && userState.selected.firstName) {
-                await userStore.update(values);
+                await userStore.update(data);
             } else {
-                await userStore.save(values);
+                await userStore.save(data);
             }
 
             const newValues = {
@@ -29,6 +37,7 @@ function Add() {
                 ...userStore.getInitialState()
             };
             delete newValues.ID;
+
             formikBag.resetForm({values: newValues});
             formikBag.setSubmitting(false);
         },
@@ -63,6 +72,16 @@ function Add() {
                                aria-label="Last Name"
                                onChange={formik.handleChange}
                                value={formik.values.lastName}
+                        />
+                    </div>
+                    <div className="">
+                        <label className="block text-sm text-gray-600" htmlFor="profilePic">Name</label>
+                        <input className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+                               id="profilePic" name="profilePic" type="file" required="" placeholder="User Profile Pic"
+                               aria-label="Profile Pic"
+                               onChange={(event) => {
+                                   formik.setFieldValue("profilePic", event.currentTarget.files[0]);
+                               }}
                         />
                     </div>
                     <div className="mt-6">

@@ -6,11 +6,16 @@ import (
 	"bixpark_server/internal/results"
 	"bixpark_server/internal/service"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 )
+
+var TAG = "USER_API"
 
 type UserApi struct {
 	app *bixpark.BixParkApp
@@ -24,6 +29,69 @@ func (api UserApi) SetupRoutes() {
 	api.app.Router.HandleFunc(api.app.BuildPath(content, "{id}"), api.update).Methods("PUT")
 	api.app.Router.HandleFunc(api.app.BuildPath(content, "{id}"), api.delete).Methods("DELETE")
 	api.app.Router.HandleFunc(api.app.BuildPath(content, "{id}"), api.get).Methods("GET")
+}
+
+// _/users - POST - SAVE
+func (api UserApi) post(w http.ResponseWriter, r *http.Request) {
+
+	err := r.ParseMultipartForm(100000)
+
+	api.app.Log(TAG, err)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	//get a ref to the parsed multipart form
+	m := r.MultipartForm
+	profilePics := m.File["profilePic"]
+	if len(profilePics) > 0 {
+		profilePic, err := profilePics[0].Open()
+
+		api.app.Log(TAG, profilePics[0].Filename)
+
+		defer profilePic.Close()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		dst, err := os.Create(fmt.Sprintf("%s/%s", api.app.Config.App.MediaPath, profilePics[0].Filename))
+		defer dst.Close()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		//copy the uploaded file to the destination file
+		if _, err := io.Copy(dst, profilePic); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	user := data.User{
+		FirstName: r.FormValue("firstName"),
+		LastName:  r.FormValue("lastName"),
+		Email:     r.FormValue("email"),
+		ProfilePic: data.FileRecode{
+			Name: profilePics[0].Filename,
+			Type: "",
+			Path: profilePics[0].Filename,
+		},
+	}
+	user.ProfilePic.Encode()
+	userService := service.UserService{
+		DB: api.app.DB,
+	}
+	userService.Save(&user)
+
+	response := results.SingleResponse{
+		Data: &user,
+		Message: results.Message{
+			Status:  200,
+			Message: "Success",
+		},
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 // _/users/ - GET - GET ALL
@@ -53,31 +121,6 @@ func (api UserApi) getAll(w http.ResponseWriter, r *http.Request) {
 	log.Println(response)
 	json.NewEncoder(w).Encode(response)
 
-}
-
-// _/users - POST - SAVE
-func (api UserApi) post(w http.ResponseWriter, r *http.Request) {
-	var user data.User
-
-	err := json.NewDecoder(r.Body).Decode(&user)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	log.Println(user.FirstName)
-	userService := service.UserService{
-		DB: api.app.DB,
-	}
-	userService.Save(&user)
-
-	response := results.SingleResponse{
-		Data: &user,
-		Message: results.Message{
-			Status:  200,
-			Message: "Success",
-		},
-	}
-	json.NewEncoder(w).Encode(response)
 }
 
 // _/users - PUT - UPDATE

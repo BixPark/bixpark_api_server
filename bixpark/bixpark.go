@@ -35,10 +35,19 @@ func (app *BixParkApp) Init() {
 			return
 		})
 	})
+
 }
 func (app *BixParkApp) Finalize() {
 	spa := spaHandler{staticPath: "./spa_web/build", indexPath: "index.html"}
 	app.Router.PathPrefix("/").Handler(spa)
+	app.Router.PathPrefix("/media/").Handler(http.StripPrefix("/media/", http.FileServer(http.Dir(app.Config.App.MediaPath))))
+}
+
+func (app *BixParkApp) Log(tag string, messages ...interface{}) {
+	prefix := make([]interface{}, 0)
+	prefix = append(prefix, app.Config.App.Name, " ", tag, " :: ")
+	messages = append(prefix, messages...)
+	log.Println(messages...)
 }
 
 func openLogFile(logfile string) {

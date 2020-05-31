@@ -10,6 +10,7 @@ type Config struct {
 	App struct {
 		Name        string `yaml:"name"`
 		Description string `yaml:"description"`
+		MediaPath   string `yaml:"mediaPath"`
 	}
 
 	Route struct {

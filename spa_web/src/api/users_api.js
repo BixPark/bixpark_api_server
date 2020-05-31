@@ -16,9 +16,7 @@ const UsersApi = {
         let submitUrl = TAG_API_URL;
         return fetch(submitUrl, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: "cors", // or without this line
-            redirect: 'follow',
-            body: JSON.stringify(tag),
+            body: tag,
         }).then(res => res.json())
             .then(res => res.data);
     },
