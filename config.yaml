@@ -1,7 +1,9 @@
 app:
   name: BixParkSampleServer
   description: Service application for bixpark
-
+route:
+  prefix: api
+  version: v1
 #  jdbc:postgresql://localhost:5432/bixpark_service_app_db?sslmode=disable?
 db:
   host: localhost

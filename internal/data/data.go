@@ -1,7 +1,9 @@
 package data
 
-import "github.com/jinzhu/gorm"
+import (
+	"bixpark_server/bixpark"
+)
 
-func SetupDB(db *gorm.DB) {
-	db.AutoMigrate(&User{}, &UserLogin{})
+func SetupDB(app *bixpark.BixParkApp) {
+	app.DB.AutoMigrate(&User{}, &UserLogin{})
 }

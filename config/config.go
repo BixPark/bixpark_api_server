@@ -12,6 +12,11 @@ type Config struct {
 		Description string `yaml:"description"`
 	}
 
+	Route struct {
+		Prefix  string `yaml:"prefix"`
+		Version string `yaml:"version"`
+	}
+
 	DB struct {
 		Host     string `yaml:"host"`
 		Port     int    `yaml:"port"`
