@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
 import {UserComponent} from "./editor/users/Component";
+import authenticationStore from "./store/authentication_store";
 
 function DashboardNav() {
     return (
@@ -58,6 +59,11 @@ function Dashboard() {
                             className="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
                             <img src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400"/>
                         </button>
+                    </div>
+                    <div>
+                        <a onClick={()=>{
+                            authenticationStore.signOut();
+                        }}>Logout</a>
                     </div>
                 </header>
 

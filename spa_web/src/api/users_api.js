@@ -1,6 +1,9 @@
 const TAG_API_URL = process.env.REACT_APP_BIXPARK_CONTENT_APP_BASE_URL +
     "api/v1/users";
 
+const AUTH_API_URL = process.env.REACT_APP_BIXPARK_CONTENT_APP_BASE_URL +
+    "api/v1/authenticate";
+
 const UsersApi = {
     getAll: async (limit, offset) => {
         let dataUrl = TAG_API_URL + "/" + limit + "/" + offset;
@@ -30,6 +33,16 @@ const UsersApi = {
             body: JSON.stringify(tag),
         }).then(res => res.json())
             .then(res => res.data).catch(console.error);
+    },
+    authenticate: async (user) => {
+        let submitUrl = AUTH_API_URL;
+        console.log(submitUrl, JSON.stringify(user));
+        return fetch(submitUrl, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // or without this line
+            redirect: 'follow',
+            body: JSON.stringify(user),
+        }).then(res => res.json()).catch(console.error);
     },
     delete: async (tagId) => {
         let submitUrl = TAG_API_URL + "/" + tagId;
