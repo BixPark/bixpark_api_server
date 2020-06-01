@@ -4,8 +4,8 @@ mkdir _build/media
 go build -o _build
 cd spa_web
 npm install
-rm -R buid
-npm react-scripts build
+rm -R build
+npm run-script build
 cd ../
 chmod +x ./_build/bixpark_server
 ./_build/bixpark_server  -config ./_build/app.config.yaml
