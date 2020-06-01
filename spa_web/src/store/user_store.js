@@ -7,6 +7,7 @@ class UserModal {
     firstName = "";
     lastName = "";
     email = "";
+    password = "";
     ProfilePic = {
         path: ""
     };
@@ -18,6 +19,7 @@ const InitialData = () => {
         firstName: initialData.firstName,
         lastName: initialData.lastName,
         email: initialData.email,
+        password: initialData.password,
         ProfilePic: initialData.ProfilePic,
     }
 };

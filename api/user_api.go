@@ -23,12 +23,42 @@ type UserApi struct {
 
 func (api UserApi) SetupRoutes() {
 	content := "users"
-	// Users
+	// User Login
+	api.app.Router.HandleFunc(api.app.BuildPath("authenticate"), api.authenticate).Methods("POST")
+
+	// Users CURD Operations
 	api.app.Router.HandleFunc(api.app.BuildPath(content), api.post).Methods("POST")
 	api.app.Router.HandleFunc(api.app.BuildPath(content, "{limit}", "{offset}"), api.getAll).Methods("GET")
 	api.app.Router.HandleFunc(api.app.BuildPath(content, "{id}"), api.update).Methods("PUT")
 	api.app.Router.HandleFunc(api.app.BuildPath(content, "{id}"), api.delete).Methods("DELETE")
 	api.app.Router.HandleFunc(api.app.BuildPath(content, "{id}"), api.get).Methods("GET")
+}
+
+func (api UserApi) authenticate(w http.ResponseWriter, r *http.Request) {
+	var loginCredentials data.Credentials
+	err := json.NewDecoder(r.Body).Decode(&loginCredentials)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	userService := service.UserService{
+		DB: api.app.DB,
+	}
+	api.app.Log(TAG, loginCredentials.Password, " ", loginCredentials.Username)
+	loginCredentials.Hash(api.app.Config)
+	user, err := userService.Authenticate(&loginCredentials)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	loginResponse := results.SingleResponse{
+		Data:    user,
+		Message: results.Message{},
+	}
+
+	json.NewEncoder(w).Encode(loginResponse)
 }
 
 // _/users - POST - SAVE
@@ -68,6 +98,7 @@ func (api UserApi) post(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
 	user := data.User{
 		FirstName: r.FormValue("firstName"),
 		LastName:  r.FormValue("lastName"),
@@ -78,11 +109,18 @@ func (api UserApi) post(w http.ResponseWriter, r *http.Request) {
 			Path: profilePics[0].Filename,
 		},
 	}
+
+	credentials := data.Credentials{
+		Username: r.FormValue("email"),
+		Password: r.FormValue("password"),
+	}
+
+	credentials.Hash(api.app.Config)
 	user.ProfilePic.Encode()
 	userService := service.UserService{
 		DB: api.app.DB,
 	}
-	userService.Save(&user)
+	userService.Save(&user, &credentials)
 
 	response := results.SingleResponse{
 		Data: &user,

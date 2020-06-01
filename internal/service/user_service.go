@@ -3,14 +3,50 @@ package service
 import (
 	"bixpark_server/internal/data"
 	"github.com/jinzhu/gorm"
+	"log"
 )
 
 type UserService struct {
 	DB *gorm.DB
 }
+type UserAccountNotExistsError struct{}
+type AuthenticationFailedError struct{}
 
-func (service UserService) Save(user *data.User) {
+func (*UserAccountNotExistsError) Error() string {
+	return "user account not exists"
+}
+func (*AuthenticationFailedError) Error() string {
+	return "Authentication failed"
+}
+func (service UserService) Authenticate(credentials *data.Credentials) (user *data.User, err error) {
+	var userLogin data.UserLogin
+	service.DB.Preload("User").Model(&data.UserLogin{}).Where(&data.UserLogin{
+		Username: credentials.Username,
+	}).First(&userLogin)
+	if userLogin == (data.UserLogin{}) {
+		return nil, &UserAccountNotExistsError{}
+	}
+
+	log.Println(userLogin.Password, " ", credentials.Password)
+	if userLogin.Password == credentials.Password {
+		user = &userLogin.User
+		return
+	} else {
+		return nil, &AuthenticationFailedError{}
+	}
+	return
+}
+
+// Basic CURD
+func (service UserService) Save(user *data.User, credential *data.Credentials) {
 	service.DB.Create(user)
+	userLogin := data.UserLogin{
+		Username:  credential.Username,
+		Password:  credential.Password,
+		UserRefer: user.ID,
+	}
+	service.DB.Create(&userLogin)
+
 }
 func (service UserService) Update(updateData *data.User) (content *data.User) {
 	if err := service.DB.Preload("ProfilePic").Model(&data.User{}).Where("ID =?", updateData.ID).Update(updateData).Error; err != nil {

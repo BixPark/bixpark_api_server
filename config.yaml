@@ -12,3 +12,6 @@ db:
   user: postgres
   password: dewmal91
   db: bixpark_service_app_db
+
+security:
+  salt: $uyg34uiydsw3

@@ -25,6 +25,10 @@ type Config struct {
 		Password string `yaml:"password"`
 		BbName   string `yaml:"db"`
 	}
+
+	Security struct {
+		Salt string `yaml:"salt"`
+	}
 }
 
 func newConfig(configPath string) (*Config, error) {

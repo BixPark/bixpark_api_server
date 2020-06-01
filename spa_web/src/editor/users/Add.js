@@ -23,9 +23,11 @@ function Add() {
             data.append("firstName", values.firstName);
             data.append("lastName", values.lastName);
             data.append("email", values.email);
+            data.append("password", values.password);
             data.append("profilePic", values.profilePic);
 
-            console.log(data);
+            console.log(values.password);
+
             if (userState.selected.ID != null && userState.selected.firstName) {
                 await userStore.update(data);
             } else {
@@ -75,7 +77,27 @@ function Add() {
                         />
                     </div>
                     <div className="">
-                        <label className="block text-sm text-gray-600" htmlFor="profilePic">Name</label>
+                        <label className="block text-sm text-gray-600" htmlFor="name">Email</label>
+                        <input className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+                               id="email" name="email" type="email" required="" placeholder="User Email"
+                               aria-label="User Email"
+                               onChange={formik.handleChange}
+                               value={formik.values.email}
+                        />
+                    </div>
+                    <div className="">
+                        <label className="block text-sm text-gray-600" htmlFor="password">Password (Leave empty for auto
+                            generate)</label>
+                        <input className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+                               id="password" name="password" type="password" required="" placeholder="Password"
+                               aria-label="Password"
+                               onChange={formik.handleChange}
+                               value={formik.values.password}
+
+                        />
+                    </div>
+                    <div className="">
+                        <label className="block text-sm text-gray-600" htmlFor="profilePic">Profile picture</label>
                         <input className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
                                id="profilePic" name="profilePic" type="file" required="" placeholder="User Profile Pic"
                                aria-label="Profile Pic"
